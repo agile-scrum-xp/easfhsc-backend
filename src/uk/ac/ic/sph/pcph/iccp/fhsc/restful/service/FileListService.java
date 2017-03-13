@@ -8,11 +8,14 @@ import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+
+import com.google.common.net.MediaType;
 
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Files;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserCategory;
@@ -60,5 +63,84 @@ public class FileListService {
 			
 		return Response.status(200).entity(list).build();
 	}
+	
+	@GET
+	@Produces("application/json")
+	@Path("/details/coordinator/{recordID}")
+	@Secured({FHSCUserCategory.COORDINATOR})
+	public Response getFileDetailsForCoordinator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+		Files f=null;
+		try{
+			f=fileUtility.getFile(recordID);
+			return Response.status(200).entity(f).build();
+		}catch(Exception e){
+			return Response.status(400).entity(e.getMessage()).type("text/plain").build();
+		}
+	}
 
+	/**
+	 * For investigator need to check that it is his own files
+	 * @param context
+	 * @return
+	 */
+	@GET
+	@Produces("application/json")
+	@Path("/details/investigator/{recordID}")
+	@Secured({FHSCUserCategory.INVESTIGATOR})
+	public Response getFileDetailsForInvestigator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+		String username=context.getUserPrincipal().getName();
+		
+		Files f=null;
+		try{
+			f=fileUtility.getFile(username,recordID);
+			return Response.status(200).entity(f).build();
+		}catch(Exception e){
+			return Response.status(400).entity(e.getMessage()).type("text/plain").build();
+		}
+	}
+	
+	@GET
+	@Produces("application/json")
+	@Path("/details/coordinator/{recordID}")
+	@Secured({FHSCUserCategory.COORDINATOR})
+	public Response getFilePerviewForCoordinator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+		Files f=null;
+		try{
+			f=fileUtility.getFile(recordID);
+			/*
+			 * transform in pdf and return stream! 
+			 */
+			
+			return Response.status(200).entity(f).build();
+		}catch(Exception e){
+			return Response.status(400).entity(e.getMessage()).type("text/plain").build();
+		}
+	}
+
+	/**
+	 * For investigator need to check that it is his own files
+	 * @param context
+	 * @return
+	 */
+	@GET
+	@Produces("application/json")
+	@Path("/details/investigator/{recordID}")
+	@Secured({FHSCUserCategory.INVESTIGATOR})
+	public Response getFilePreviewForInvestigator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+		String username=context.getUserPrincipal().getName();
+		
+		Files f=null;
+		try{
+			f=fileUtility.getFile(username,recordID);
+			/*
+			 *  transform in pdf and return stream! 
+			 */
+			
+			return Response.status(200).entity(f).build();
+		}catch(Exception e){
+			return Response.status(400).entity(e.getMessage()).type("text/plain").build();
+		}
+	}
+	
+	
 }

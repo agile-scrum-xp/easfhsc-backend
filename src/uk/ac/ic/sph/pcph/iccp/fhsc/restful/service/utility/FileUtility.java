@@ -170,6 +170,28 @@ public class FileUtility {
 		return result;
 	}
 	
+	
+	public Files getFile(Integer fileId){
+		FilesJpaController controller=new FilesJpaController(this.fhsc_management_emf);
+		Files f=controller.findFiles(fileId);
+		return f;
+	}
+	
+	public Files getFile(String username, Integer fileId) throws Exception
+	{
+		
+		Files f=getFile(fileId);
+		if(f==null)
+			return f;
+		
+		Login login=loginUtility.getLoginForUsername(username);
+		if (!login.getUserId().getUserId().equals(f.getUserId().getUserId()))
+			throw new Exception("It is not the investigator file!");
+		return f;
+	}
+		
+	
+	
 	/**
 	 * 
 	 * @param physicalFile
