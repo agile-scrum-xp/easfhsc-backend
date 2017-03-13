@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context path="fhscServices" reloadable="true" copyXML="true">
+
+	<Resource name="jdbc/fhscDB" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/fhsc_db"
+		username="fhsc_admin" password="ImperialCollege@2016" maxActive="30"
+		maxIdle="10" maxWait="-1" />
+
+	<!-- <Resource name="jdbc/astrazenecaDB" auth="Container" type="javax.sql.DataSource" 
+		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/astrazeneca_test" 
+		username="neauser" password="webAdminPW" maxActive="30" maxIdle="10" maxWait="-1" 
+		/> -->
+
+	<Resource name="mail/Session" auth="Container" type="javax.mail.Session"
+		username="easfhsc" password="easfhsc" mail.user="easfhsc"
+		mail.password="RV63!csp" mail.debug="false" mail.from="easfhsc@imperial.ac.uk"
+		mail.transport.protocol="smtp" mail.smtp.host="smtp.cc.ic.ac.uk"
+		mail.smtp.auth="true" mail.smtp.port="587" mail.smtp.starttls.enable="true"
+		description="FHSC E-Mail Resource" />
+
+	<Resource name="BeanManager" auth="Container"
+		type="javax.enterprise.inject.spi.BeanManager" factory="org.jboss.weld.resources.ManagerObjectFactory" />
+
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+	<WatchedResource>META-INF/context.xml</WatchedResource>
+
+	<!-- Application Parameters -->
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.token.life" value="3600" />
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="H:/eas_workspace/uploaded/" />
+	
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.root.upload.dir" value="60" />
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.key.location" value="60" />
+
+		
+	<!--<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="/opt/server/external_resource_folder/fhscServices/email_template/"/>-->
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="H:/eas_workspace/mails_templates/"/>
+	
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.admin.notification.template.name" value="email_admin_notification_template.ftl"/>
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.admin.notification.email.subject" value="New user registered with FHSC"/>
+	
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.registration.template.name" value="email_admin_notification_template.ftl"/>
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.registration.email.subject" value="Welcome to FHSC"/>
+	
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.failure.template.name" value="email_admin_notification_template.ftl"/>
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.failure.email.subject" value="FHSC Registration"/>
+	
+	<!--  Notification to Admin when NI upload data or any file -->
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.data.upload.notification.template.name" value="email_admin_notification_template.ftl"/>
+</Context>
