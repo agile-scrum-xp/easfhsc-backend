@@ -136,7 +136,6 @@ public class UserService {
 	public Response getApprovedUsers() {
 
 		List<User> approvedUsers = userUtility.getAllApprovedUsers();
-
 		GenericEntity<List<User>> list = new GenericEntity<List<User>>(approvedUsers) {
 		};
 
@@ -163,9 +162,7 @@ public class UserService {
 	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.INVESTIGATOR})
 	public Response getcurrentUser(@Context SecurityContext context) {
 
-		Login login=(Login) context.getUserPrincipal();
-		List<User> currentUser = new ArrayList<>();
-		currentUser.add(login.getUserId());
+		List<User> currentUser=userUtility.getCurrentUser(context.getUserPrincipal().getName());
 		GenericEntity<List<User>> list = new GenericEntity<List<User>>(currentUser) {
 		};
 		return Response.ok(list).build();

@@ -14,6 +14,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.Priorities;
 
@@ -47,9 +48,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             // Check if the user is allowed to execute the method
             // The method annotations override the class annotations
             if (methodRoles.isEmpty()) {
-                checkPermissions((Login)requestContext.getSecurityContext().getUserPrincipal(),classRoles);
+                checkPermissions(requestContext.getSecurityContext(),classRoles);
             } else {
-                checkPermissions((Login)requestContext.getSecurityContext().getUserPrincipal(),methodRoles);
+                checkPermissions(requestContext.getSecurityContext(),methodRoles);
             }
 
         } catch (Exception e) {
@@ -73,11 +74,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         }
     }
 
-    private void checkPermissions(Login login,List<FHSCUserCategory> allowedRoles) throws Exception {
+    private void checkPermissions(SecurityContext securityContext,List<FHSCUserCategory> allowedRoles) throws Exception {
         // Check if the user contains one of the allowed roles
         // Throw an Exception if the user has not permission to execute the method
     	for (FHSCUserCategory category:allowedRoles){
-    		if(login.getUserId().getCategory().toString().toUpperCase().equals(category.toString().toUpperCase()))
+    		if(securityContext.isUserInRole(category.toString().toUpperCase()))
     			return;
     	}
     	throw new Exception("User is not allowed to use this method");

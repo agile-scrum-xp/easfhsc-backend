@@ -4,31 +4,34 @@ import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;
 
+import com.sun.security.auth.UserPrincipal;
+
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
 
 public class FHSCSecurityContext implements SecurityContext{
 
-	private Login login;
+	private String username, role;
 	
 	public FHSCSecurityContext() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public FHSCSecurityContext(Login login) {
+	public FHSCSecurityContext(String username, String role) {
 		super();
-		this.login=login;
+		this.username=username;
+		this.role=role;
 	}
 
 	@Override
 	public Principal getUserPrincipal() {
 		// TODO Auto-generated method stub
-		return login;
+		return new UserPrincipal(this.username);
 	}
 
 	@Override
 	public boolean isUserInRole(String role) {
 		// TODO Auto-generated method stub
-		return login.getUserId().getCategory().toString().equals(role.toUpperCase());
+		return this.role.toUpperCase().equals(role.toUpperCase());
 	}
 
 	@Override

@@ -54,9 +54,7 @@ public class AuthenticationInterceptor implements ContainerRequestFilter, Contai
 			// Validate the token
 			FHSCUser user = validateToken(token);
 			
-			//Storing login as Principal
-			Login login=loginUtility.getLoginForUsername(user.userName);
-			requestContext.setSecurityContext(new FHSCSecurityContext(login));
+			requestContext.setSecurityContext(new FHSCSecurityContext(user.getUserName(),user.getCategory()));
 
 		} catch (Exception e) {
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
@@ -81,7 +79,7 @@ public class AuthenticationInterceptor implements ContainerRequestFilter, Contai
         Claims claim = Jwts.parser().setSigningKey("itShouldNotBeSecret").parseClaimsJws(token).getBody();
         String userName = (String) claim.get("sub");
         String country = (String) claim.get("country");
-        String category = (String) claim.get("category");
+        String category = (String) claim.get("roles");
         if (claim.getExpiration().before(new Date())) {
             throw new Exception("Token expires.");
         }

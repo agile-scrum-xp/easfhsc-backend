@@ -1,6 +1,5 @@
 package uk.ac.ic.sph.pcph.iccp.fhsc.restful.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,8 +15,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Files;
-import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
-import uk.ac.ic.sph.pcph.iccp.fhsc.domain.User;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserCategory;
 import uk.ac.ic.sph.pcph.iccp.fhsc.restful.filters.Secured;
 import uk.ac.ic.sph.pcph.iccp.fhsc.restful.service.utility.FileUtility;
@@ -59,8 +56,7 @@ public class FileListService {
 	@Path("/user")
 	@Secured({FHSCUserCategory.INVESTIGATOR})
 	public Response getuserUploadedFilesList(@Context SecurityContext context) {
-		Login loggedIn=(Login)context.getUserPrincipal();
-		GenericEntity<List<Files>> list = new GenericEntity<List<Files>>(fileUtility.getUploadedFileList(loggedIn)) {};
+		GenericEntity<List<Files>> list = new GenericEntity<List<Files>>(fileUtility.getUploadedFileList(context.getUserPrincipal().getName())) {};
 			
 		return Response.status(200).entity(list).build();
 	}

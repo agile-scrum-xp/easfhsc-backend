@@ -87,7 +87,7 @@ public class FileUploadService {
             /*
     		 * Saving file on disk, create file in database
     		 */
-            fileUtility.addFile(newFilename,originalFileName, comment, type,((Login) context.getUserPrincipal()), fileContent);
+            fileUtility.addFile(newFilename,originalFileName, comment, type,context.getUserPrincipal().getName(), fileContent);
             
             System.out.println("File upload completed");
             resp = Response.ok().build();

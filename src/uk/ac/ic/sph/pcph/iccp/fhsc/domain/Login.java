@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Login.findAll", query = "SELECT l FROM Login l"),
     @NamedQuery(name = "Login.findByUserName", query = "SELECT l FROM Login l WHERE l.userName = :userName"),
     @NamedQuery(name = "Login.findByPassword", query = "SELECT l FROM Login l WHERE l.password = :password")})
-public class Login implements Serializable, Principal {
+public class Login implements Serializable{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -104,10 +104,5 @@ public class Login implements Serializable, Principal {
     public String toString() {
         return "uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login[ userName=" + userName + " ]";
     }
-
-	@Override
-	public String getName() {
-		return this.getUserName();
-	}
     
 }

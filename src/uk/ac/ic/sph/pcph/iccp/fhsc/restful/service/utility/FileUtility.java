@@ -27,6 +27,9 @@ import uk.ac.ic.sph.pcph.iccp.fhsc.utility.ApplicationParameters;
 @ApplicationScoped
 public class FileUtility {
 
+	@Inject 
+	LoginUtility loginUtility;
+	
 	@Inject
 	ApplicationParameters applicationParameters;
 	
@@ -42,7 +45,7 @@ public class FileUtility {
 		return fhsc_management_emf.createEntityManager();
 	}
 
-	public void addFile(String name,String originalFilename, String comment, String fileTypeStr, Login login, byte[] fileContent) throws Exception
+	public void addFile(String name,String originalFilename, String comment, String fileTypeStr, String username, byte[] fileContent) throws Exception
 	{
 		/*
 		 * Checking values
@@ -61,6 +64,10 @@ public class FileUtility {
 		}catch(IllegalArgumentException e){
 			throw new Exception("Type of file is not recognised!",null);
 		}
+		/*
+		 * Retrieving Login
+		 */
+		Login login= loginUtility.getLoginForUsername(username);
 		
 		/*
 		 * Finding ideal relative path for the file (same both on external and internal server
@@ -104,7 +111,10 @@ public class FileUtility {
 		FileUtils.writeByteArrayToFile(physicalFile,fileContent);
 	}
 	
-	public List<Files> getUploadedFileList(Login login) {
+	public List<Files> getUploadedFileList(String username) {
+		
+		Login login= loginUtility.getLoginForUsername(username);
+		
 		EntityManager em = null;
 		List<Files> result = null;
 

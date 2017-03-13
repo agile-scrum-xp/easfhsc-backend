@@ -1,5 +1,6 @@
 package uk.ac.ic.sph.pcph.iccp.fhsc.restful.service.utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
+import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.User;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserStatus;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.PersistenceUnitEnum;
@@ -18,6 +20,9 @@ import uk.ac.ic.sph.pcph.iccp.fhsc.qualifier.PersistenceUnitQualifier;
 @ApplicationScoped
 public class UserUtility {
 
+	@Inject 
+	LoginUtility loginUtility;
+	
 	@Inject
 	@PersistenceUnitQualifier(PersistenceUnitEnum.FHSC_MANAGEMENT)
 	private EntityManagerFactory fhsc_management_emf;
@@ -91,6 +96,16 @@ public class UserUtility {
 			}
 		}
 		return result;
+	}
+	
+
+	
+	public List<User> getCurrentUser(String username) {
+		Login login=loginUtility.getLoginForUsername(username);
+		List<User> currentUser = new ArrayList<>();
+		currentUser.add(login.getUserId());
+		
+		return currentUser;
 	}
 	
 	public void getAllRecentUsers() {
