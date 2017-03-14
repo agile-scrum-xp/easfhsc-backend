@@ -72,14 +72,8 @@ public class LoginService {
 		String role = "guest";
 		
 		User tempUser = /*new LoginUtility()*/loginUtility.validateLogin(username, password);
-		/**
-		 * method output is 
-		 * {
-		 * 	  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBQUFBQSIsInJvbGVzIjoiZ3Vlc3QiLCJzdHVwaWQiOiJndWVzdCIsImlhdCI6MTQ4NDExNTg3Nn0.4fhACuJsKimjx_TWbdkJEJm9pq__XWs2nHBhNnC59R0"
-		 * }
-		 */
-
-		//System.out.println(loginSuccess);
+		
+		
 		if (tempUser != null) {
 			long tokenLife;
 			try {	
@@ -96,6 +90,12 @@ public class LoginService {
 	        
 	        System.out.println(expireDate.toString());
 	        
+	        /**
+			 * method output is 
+			 * {
+			 * 	  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBQUFBQSIsInJvbGVzIjoiZ3Vlc3QiLCJzdHVwaWQiOiJndWVzdCIsImlhdCI6MTQ4NDExNTg3Nn0.4fhACuJsKimjx_TWbdkJEJm9pq__XWs2nHBhNnC59R0"
+			 * }
+			 */
 			LoginResponse response = new LoginResponse(Jwts.builder().setSubject(username).claim("roles", tempUser.getCategory()).setIssuedAt(now)
 					.signWith(SignatureAlgorithm.HS256, "itShouldNotBeSecret").setExpiration(expireDate).compact());
 			

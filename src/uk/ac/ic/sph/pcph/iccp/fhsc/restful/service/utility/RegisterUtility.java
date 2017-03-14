@@ -57,24 +57,6 @@ public class RegisterUtility {
 			System.out.println("RegisterUtility add User failed: ");
 			return null;
 		}
-		
-		//Generate Login for user. For now I assume password will be stored in plain text. 
-		//If something goes wrong when creating login, then then user is deleted and registration fail.
-		//TODO: We can either send an email now to user with his login details and the encrypt password in database or we can 
-		//TODO: send the email later when the user is approved. 
-		try {
-			loginUtility.createLoginForUser(data);
-		} catch (Exception ex) {
-			try {
-				userController.destroy(data.getUserId());
-				System.out.println("RegisterUtility add User failed: ");
-				return null;
-			} catch (NonexistentEntityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		}
 
 		System.out.println("RegisterUtility add User: " + data.getUserId() + " " + data.getApplicationDate());
 		return data;
