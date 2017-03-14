@@ -10,8 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
+import uk.ac.ic.sph.pcph.iccp.fhsc.controller.UserJpaController;
+import uk.ac.ic.sph.pcph.iccp.fhsc.controller.exceptions.NonexistentEntityException;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.User;
+import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserCategory;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserStatus;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.PersistenceUnitEnum;
 import uk.ac.ic.sph.pcph.iccp.fhsc.qualifier.PersistenceUnitQualifier;
@@ -46,6 +49,36 @@ public class UserUtility {
 	
 	public List<User> getAllApprovedUsers() {
 		return getUsers(FHSCUserStatus.ACTIVE);
+	}
+	
+	public boolean userApproval(String userID, String decision, String comment) throws NonexistentEntityException, Exception {
+		try{
+			Integer userIDInt = Integer.parseInt(userID);
+			User userTemp = getUser(userIDInt);
+			
+			if(decision.equalsIgnoreCase("Approve")) {
+				userTemp.setStatus(FHSCUserStatus.ACTIVE.toString());
+				
+			} else if (decision.equalsIgnoreCase("Reject")) {
+				userTemp.setStatus(FHSCUserStatus.DISALLOWED.toString());
+			} else {
+				userTemp.setStatus(FHSCUserStatus.DISALLOWED.toString());
+			}
+			
+			userTemp.setCoordinatorComment(comment);
+			
+			new UserJpaController(fhsc_management_emf).edit(userTemp);
+			
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			throw new Exception("User not found");
+		}
+		catch (NonexistentEntityException nee) {
+			nee.printStackTrace();
+			throw new Exception("User not found");
+		}
+		
+		return true;
 	}
 	
 	public User getUser(Integer userID) {

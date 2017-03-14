@@ -44,6 +44,22 @@ public class ApplicationParameters {
 		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.admin.notification.email.subject");
 	}
 	
+	public String getUserFailedRegistrationNotificationTemplateFileName() {
+		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.user.failed.registration.template.name");
+	}
+
+	public String getUserFailedRegistrationNotificationEmailSubject() {
+		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.user.failed.registration.email.subject");
+	}
+	
+	public String getUserSuccessfulRegistrationNotificationTemplateFileName() {
+		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.registration.template.name");
+	}
+
+	public String getUserSuccessfulRegistrationNotificationEmailSubject() {
+		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.registration.email.subject");
+	}
+	
 	public String getUploadDirectory() {
 		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir");
 	}
