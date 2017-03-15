@@ -45,9 +45,11 @@ public class LoginJpaController implements Serializable {
             em.persist(login);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findLogin(login.getUserName()) != null) {
+            if (findLogin(login.getUserName()) != null ) {
                 throw new PreexistingEntityException("Login " + login + " already exists.", ex);
             }
+            if(ex.getCause()!= null && ex.getCause().getCause()!=null && ex.getCause().getCause().getCause()!=null && ex.getCause().getCause().getMessage().contains("user_id_UNIQUE"))
+            	throw new PreexistingEntityException("Login with user_id: " + login.getUserId().getUserId() + " already exists.", ex);
             throw ex;
         } finally {
             if (em != null) {
@@ -132,7 +134,9 @@ public class LoginJpaController implements Serializable {
             em.close();
         }
     }
+    
 
+    
     public int getLoginCount() {
         EntityManager em = getEntityManager();
         try {
@@ -145,5 +149,7 @@ public class LoginJpaController implements Serializable {
             em.close();
         }
     }
+    
+    
     
 }

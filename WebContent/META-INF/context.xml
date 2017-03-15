@@ -27,16 +27,16 @@
 
 	<!-- Application Parameters -->
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.token.life" value="3600" />
-	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="/opt/server/external_resource_folder/uploaded/" />	
-	<!-- <Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="H:/eas_workspace/uploaded/" />  -->
+	<!-- <Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="/opt/server/external_resource_folder/uploaded/" />	-->
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="H:/eas_workspace/uploaded/" />
 
 	
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.root.upload.dir" value="60" />
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.key.location" value="60" />
 
 		
-	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="/opt/server/external_resource_folder/fhscServices/email_template/"/>
-	<!-- <Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="H:/eas_workspace/mails_templates/"/> -->
+	<!-- <Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="/opt/server/external_resource_folder/fhscServices/email_template/"/>-->
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.template.dir" value="H:/eas_workspace/mails_templates/easfhsc-templates/"/> 
 	
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.admin.notification.template.name" value="email_admin_notification_template.ftl"/>
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.admin.notification.email.subject" value="New user registered with FHSC"/>

@@ -14,6 +14,7 @@ import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserCategory;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserStatus;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.PersistenceUnitEnum;
 import uk.ac.ic.sph.pcph.iccp.fhsc.qualifier.PersistenceUnitQualifier;
+import uk.ac.ic.sph.pcph.iccp.fhsc.utility.HashingUtility;
 
 @Named
 @ApplicationScoped
@@ -30,13 +31,8 @@ public class RegisterUtility {
 		
 	}
 	
-	public User addUser(User data) {
-		
-		//should be okay since comment is now mandatory
-		if(data.getComment() == null) {
-			data.setStatus("No Comments");
-		}
-		
+	public User addUser(User data) throws Exception {
+				
 		if(data.getCategory()== null) {
 			data.setCategory(FHSCUserCategory.PENDING.toString());
 		}
@@ -50,6 +46,9 @@ public class RegisterUtility {
 		}
 		
 		UserJpaController userController = new UserJpaController(fhsc_management_emf);
+		
+		data.setAnswerOne(new HashingUtility().hashString(data.getAnswerOne(), data.getFirstName()));
+		data.setAnswerTwo(new HashingUtility().hashString(data.getAnswerTwo(), data.getFirstName()));
 		
 		userController.create(data);
 		

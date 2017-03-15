@@ -12,12 +12,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.User;
+import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCUserCategory;
 import uk.ac.ic.sph.pcph.iccp.fhsc.restful.filters.Secured;
 import uk.ac.ic.sph.pcph.iccp.fhsc.restful.service.utility.LoginUtility;
 import uk.ac.ic.sph.pcph.iccp.fhsc.utility.ApplicationParameters;
@@ -71,9 +74,13 @@ public class LoginService {
 		System.out.println();
 		String role = "guest";
 		
-		User tempUser = /*new LoginUtility()*/loginUtility.validateLogin(username, password);
-		
-		
+		User tempUser=null;
+		try {
+			tempUser = /*new LoginUtility()*/loginUtility.validateLogin(username, password);
+		} catch (Exception e) {
+			//catch Hashing exception
+		}
+
 		if (tempUser != null) {
 			long tokenLife;
 			try {	
@@ -145,6 +152,21 @@ public class LoginService {
 		
 		String result = "{ \"result\":" + "\" This is Login Test \", " + "\"test\":" + "\"" + secret.getUserName() + "  " + secret.getPassWord() + "\"" + "}";
 		return Response.status(200).entity(result).build();
+	}
+	
+	@POST
+	@Path("/newpassword")
+	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
+	public Response changePassword(@Context SecurityContext context, @FormParam("newPassword") String newPassword) {
+		String username=context.getUserPrincipal().getName();
+		String password=newPassword;
+		
+		try {
+			loginUtility.changeLogin(username, password);
+		} catch (Exception e) {
+			return Response.status(500).entity("The User not found").build();
+		}
+		return Response.ok().build();
 	}
 	
 	/*

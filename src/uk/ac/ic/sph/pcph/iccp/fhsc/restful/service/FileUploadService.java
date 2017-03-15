@@ -60,7 +60,7 @@ public class FileUploadService {
     @Path("/fileupload")
     @Consumes("multipart/form-data")
     @Produces(MediaType.TEXT_PLAIN)
-	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.INVESTIGATOR })
+	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR })
     public Response fileupload(MultipartFormDataInput input, @Context SecurityContext context) {
 		/*
 		 * Extracting data from request
