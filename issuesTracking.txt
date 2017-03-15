@@ -1,4 +1,5 @@
-date		type		date solved		description
+CLOSED ISSUES
+date		type		date solved		description			
 14/03/2017	request		15/03/2017		Registration form should have list of countries, list of professions and list of specialities predefined. (avoid free text input). – Antonio will send specialities and professions list(s)
 14/03/2017	request		15/03/2017		Comment in registration form should not be mandatory. 
 14/03/2017	request		15/03/2017		The user list could have one column filterable on last name only but displaying “title, first name, last name”. – in order to gain place
@@ -7,7 +8,13 @@ date		type		date solved		description
 14/03/2017	request		15/03/2017 		Possibility should be given for all user  to see their account information and ideally change their password.
 14/03/2017	request		15/03/2017		“Assoc. prof” could be added to the title list. 
 14/03/2017	request		15/03/2017		In user category, on approval the coordinator attributes one of the following role to the applicant: 
-										o	LEAD INVESTIGATOR
+15/03/2017	bug			15/03/2017		More than one login could be generated for a user.  Now if another the status of a user is not pending it is not possibel to change his status
+										In order to do that I did some validation on backend (checking if login alreday exists and hid the form controls if not pending user in front-end)
+
+OPEN ISSUES						
+date		type		date solved		description			
+15/03/2017	request						It should be possible for a user to login based on his security question. 
+											o	LEAD INVESTIGATOR
 										o	CONTRIBUTOR INVESTIGATOR
 										o	COORDINATOR
 										Both lead and contributor investigators have the same “investigator” access to the application. 
@@ -19,6 +26,3 @@ date		type		date solved		description
 										They upload the file from their account and specify the recipient(all or one investigator). Then the national investigator will see the sharing agreement appears in a “FHSC document” tab. 
 										Once they completed the document, the investigator would upload the sharing agreement via the file listing tab.
 14/03/2017	request						Any file should be downloadable by a coordinator. An investigator could download his own files. 
-15/03/2017	bug			15/03/2017		More than one login could be generated for a user.  Now if another login is generated for a user the service throw an error. 
-										database has been updated so the user_id column is unique. If coordinator change user status and user already has a login no login is generated!
-										
