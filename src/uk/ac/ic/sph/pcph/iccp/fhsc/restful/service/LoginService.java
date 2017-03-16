@@ -159,10 +159,9 @@ public class LoginService {
 	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
 	public Response changePassword(@Context SecurityContext context, @FormParam("newPassword") String newPassword) {
 		String username=context.getUserPrincipal().getName();
-		String password=newPassword;
 		
 		try {
-			loginUtility.changeLogin(username, password);
+			loginUtility.changeLogin(username, newPassword);
 		} catch (Exception e) {
 			return Response.status(500).entity("The User not found").build();
 		}

@@ -12,7 +12,7 @@ public class testGeneratepassword {
 	public void testGeneratepassword() {
 		
 		try {
-			String result=new HashingUtility().hashString("test140", "cs1");
+			String result=new HashingUtility().hashString("christophe", "cs1");
 			System.out.println(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
