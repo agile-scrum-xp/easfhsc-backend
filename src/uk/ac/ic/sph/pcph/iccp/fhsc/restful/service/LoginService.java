@@ -79,9 +79,7 @@ public class LoginService {
 		try {
 			tempUser = /*new LoginUtility()*/loginUtility.validateLogin(username, password);
 		} catch (Exception e) {
-			//catch Hashing exception
-			e.printStackTrace();
-			return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).type("text/plain").build();
+
 		}
 
 		if (tempUser != null) {
