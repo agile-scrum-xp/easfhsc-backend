@@ -3,7 +3,7 @@
 <Context path="fhscServices" reloadable="true" copyXML="true">
 
 	<Resource name="jdbc/fhscDB" auth="Container" type="javax.sql.DataSource"
-		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://fhsc.med.ic.ac.uk:3306/fhsc_db"
+		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/fhsc_db"
 		username="fhsc_admin" password="ImperialCollege@2016" maxActive="30"
 		maxIdle="10" maxWait="-1" />
 
@@ -27,7 +27,7 @@
 
 	<!-- Application Parameters -->
 	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.token.life" value="3600" />
-	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="/opt/server/external_resource_folder/uploaded/" />
+	<Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="/opt/server/external_resource_folder/fhscServices/uploaded/" />
 	<!-- <Parameter name="uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir" value="H:/eas_workspace/uploaded/" />-->
 
 	
