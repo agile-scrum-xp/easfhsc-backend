@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -79,6 +80,8 @@ public class LoginService {
 			tempUser = /*new LoginUtility()*/loginUtility.validateLogin(username, password);
 		} catch (Exception e) {
 			//catch Hashing exception
+			e.printStackTrace();
+			return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).type("text/plain").build();
 		}
 
 		if (tempUser != null) {
@@ -125,7 +128,7 @@ public class LoginService {
 			 * was hoping to send custom error message
 			 * have to find any other way
 			 */
-			return Response.status(Response.Status.NOT_FOUND).entity(response).build();
+			return Response.status(Response.Status.NOT_FOUND).entity(response).type(MediaType.TEXT_PLAIN).build();
 		}
 	}
 	
