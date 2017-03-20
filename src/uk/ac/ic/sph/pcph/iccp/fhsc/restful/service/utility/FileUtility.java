@@ -18,7 +18,6 @@ import org.apache.commons.io.FilenameUtils;
 import uk.ac.ic.sph.pcph.iccp.fhsc.controller.FilesJpaController;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Files;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
-import uk.ac.ic.sph.pcph.iccp.fhsc.enums.FHSCFileUploadType;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.PersistenceUnitEnum;
 import uk.ac.ic.sph.pcph.iccp.fhsc.qualifier.PersistenceUnitQualifier;
 import uk.ac.ic.sph.pcph.iccp.fhsc.utility.ApplicationParameters;
@@ -57,13 +56,7 @@ public class FileUtility {
 		if(fileTypeStr==null || fileTypeStr.isEmpty())
 			throw new Exception("File has no type!",null);
 		
-		FHSCFileUploadType fileType;
-		try
-		{
-			fileType=FHSCFileUploadType.valueOf(fileTypeStr);
-		}catch(IllegalArgumentException e){
-			throw new Exception("Type of file is not recognised!",null);
-		}
+
 		/*
 		 * Retrieving Login
 		 */
@@ -93,7 +86,7 @@ public class FileUtility {
 		fileDatabaseRecord.setFileName(name);
 		fileDatabaseRecord.setFileSize((int) physicalFile.length());
 		fileDatabaseRecord.setComment(comment);
-		fileDatabaseRecord.setFileType(fileType.toString());
+		fileDatabaseRecord.setFileType(fileTypeStr);
 		fileDatabaseRecord.setUploadDate(uploadedDate);
 		fileDatabaseRecord.setUserId(login.getUserId());
 		

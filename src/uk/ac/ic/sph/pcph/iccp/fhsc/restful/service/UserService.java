@@ -72,11 +72,17 @@ public class UserService {
 	@Consumes("application/json")
 	@Path("/register")
 	public Response registerUser(User data) {
-
+		String resultUnsucessful = "{ \"result\":" + "\" Registration is not successful. Please, try later. \"" + "}";
+		
 		System.out.println("registerUser service called with data: " + data.getTitle() + " " + data.getFirstName() + " "
 				+ data.getLastName());
 
-		User tempUser = registerUtility.addUser(data);
+		User tempUser;
+		try {
+			tempUser = registerUtility.addUser(data);
+		} catch (Exception e) {
+			return Response.status(500).entity(resultUnsucessful).build();
+		}
 
 		if (tempUser != null) {
 			Map<String, Object> dataset = createDatasetForAdminEmail(tempUser);
@@ -95,8 +101,7 @@ public class UserService {
 			return Response.status(200).entity(result).build();
 		}
 
-		String result = "{ \"result\":" + "\" Registration is not successful. Please, try later. \"" + "}";
-		return Response.status(500).entity(result).build();
+		return Response.status(500).entity(resultUnsucessful).build();
 	}
 
 	// http://localhost:8080/fhscServices/rest/fhsc/user/pending
@@ -159,7 +164,7 @@ public class UserService {
 	// http://localhost:8080/fhscServices/rest/fhsc/user/
 	@POST
 	@Produces("application/json")
-	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.INVESTIGATOR})
+	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
 	public Response getcurrentUser(@Context SecurityContext context) {
 
 		List<User> currentUser=userUtility.getCurrentUser(context.getUserPrincipal().getName());
@@ -187,6 +192,8 @@ public class UserService {
 		
 		return Response.status(Response.Status.NOT_FOUND).entity("The User not found").build();
 	}
+	
+
 
 	private Map<String, Object> createDatasetForAdminEmail(User user) {
 

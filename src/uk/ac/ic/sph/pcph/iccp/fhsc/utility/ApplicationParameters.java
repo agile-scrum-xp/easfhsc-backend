@@ -60,6 +60,7 @@ public class ApplicationParameters {
 		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.user.successful.registration.email.subject");
 	}
 	
+	
 	public String getUploadDirectory() {
 		return servletContext.getInitParameter("uk.ac.ic.sph.pcph.iccp.fhsc.upload.dir");
 	}

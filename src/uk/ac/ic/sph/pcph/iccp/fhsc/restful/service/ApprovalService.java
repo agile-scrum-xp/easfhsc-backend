@@ -64,37 +64,51 @@ public class ApprovalService {
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	@Produces("application/json")
-	public Response approval(@FormParam("userID") String userID, @FormParam("decision") String decision, @FormParam("comment") String comment) {
+	public Response approval(@FormParam("userID") String userID, @FormParam("decision") String decision, @FormParam("comment") String comment, @FormParam("category") String category) {
 		try{
-			userUtility.userApproval(userID, decision, comment);
+			
+			
+			userUtility.userApproval(userID, decision, comment, category);
 			
 			User user = userUtility.getUser(Integer.parseInt(userID));
-			//Generate Login for user. For now I assume password will be stored in plain text. 
-			//If something goes wrong when creating login, then then user is deleted and registration fail.
-			//TODO: We can either send an email now to user with his login details and the encrypt password in database or we can 
-			//TODO: send the email later when the user is approved. 
+
 			try {
-				Login login = loginUtility.createLoginForUser(user);
+				Login login=null;
+				//Check that login user doesn't exist for user
+				login=loginUtility.getLoginForUser(user);
 				
+				if (login!=null)
+					return Response.status(400).entity("{ \"result\":" + "\" This user has already been approved/rejected \"" + "}").build();
 				if(decision.equalsIgnoreCase("Approve")) {
-					Map<String, Object> dataset = createDatasetForSuccessfulRegistrationEmail(user, login);
+					//create Login on approve only if not already existent
+					//Then send Login info
+					if (login==null){
+						//If something goes wrong when creating login, then then user is deleted and registration fail.
+						login = loginUtility.createLoginForUser(user);
+						
+						Map<String, Object> dataset = createDatasetForSuccessfulRegistrationEmail(user, login);
+						loginUtility.secureLogin(login);
+						
+						String freeMarkerTemplateDir = applicationParameters.getTemplateDirectory();
+						String freeMarkerTemplateName = applicationParameters.getUserSuccessfulRegistrationNotificationTemplateFileName();
+						String emailSubject = applicationParameters.getUserSuccessfulRegistrationNotificationEmailSubject();
+						
+						String messageBody = createEmailMessage(dataset, freeMarkerTemplateDir, freeMarkerTemplateName);
+						
+						sendEmail(emailSubject, messageBody, user.getEmail());
+					}
 					
-					String freeMarkerTemplateDir = applicationParameters.getTemplateDirectory();
-					String freeMarkerTemplateName = applicationParameters.getUserSuccessfulRegistrationNotificationTemplateFileName();
-					String emailSubject = applicationParameters.getUserSuccessfulRegistrationNotificationEmailSubject();
-					
-					String messageBody = createEmailMessage(dataset, freeMarkerTemplateDir, freeMarkerTemplateName);
-					
-					sendEmail(emailSubject, messageBody, user.getEmail());
 				} else {
-					Map<String, Object> dataset = createDatasetForFailedRegistrationEmail(user);
-					String freeMarkerTemplateDir = applicationParameters.getTemplateDirectory();
-					String freeMarkerTemplateName = applicationParameters.getUserFailedRegistrationNotificationTemplateFileName();
-					String emailSubject = applicationParameters.getUserFailedRegistrationNotificationEmailSubject();
-					
-					String messageBody = createEmailMessage(dataset, freeMarkerTemplateDir, freeMarkerTemplateName);
-					
-					sendEmail(emailSubject, messageBody, user.getEmail());
+					if (login==null){
+						Map<String, Object> dataset = createDatasetForFailedRegistrationEmail(user);
+						String freeMarkerTemplateDir = applicationParameters.getTemplateDirectory();
+						String freeMarkerTemplateName = applicationParameters.getUserFailedRegistrationNotificationTemplateFileName();
+						String emailSubject = applicationParameters.getUserFailedRegistrationNotificationEmailSubject();
+						
+						String messageBody = createEmailMessage(dataset, freeMarkerTemplateDir, freeMarkerTemplateName);
+						
+						sendEmail(emailSubject, messageBody, user.getEmail());
+					}
 				}
 			} catch (Exception ex) {
 				String result = "{ \"result\":" + "\" User Update is not successful. Please, try later. \"" + "}";
@@ -125,7 +139,7 @@ public class ApprovalService {
 		return dataset;
 
 	}
-	
+		
 	private Map<String, Object> createDatasetForFailedRegistrationEmail(User user) {
 
 		Map<String, Object> dataset = new HashMap<String, Object>();

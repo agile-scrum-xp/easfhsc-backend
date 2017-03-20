@@ -46,7 +46,7 @@ public class FileListService {
 	@POST
 	@Produces("application/json")
 	@Path("/all")
-	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.INVESTIGATOR})
+	@Secured({FHSCUserCategory.COORDINATOR,FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
 	public Response getAllUploadedFilesList(@Context SecurityContext context) {
 		GenericEntity<List<Files>> list = new GenericEntity<List<Files>>(fileUtility.getAllUploadedFileList()) {};
 			
@@ -57,7 +57,7 @@ public class FileListService {
 	@POST
 	@Produces("application/json")
 	@Path("/user")
-	@Secured({FHSCUserCategory.INVESTIGATOR})
+	@Secured({FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
 	public Response getuserUploadedFilesList(@Context SecurityContext context) {
 		GenericEntity<List<Files>> list = new GenericEntity<List<Files>>(fileUtility.getUploadedFileList(context.getUserPrincipal().getName())) {};
 			
@@ -86,13 +86,13 @@ public class FileListService {
 	@GET
 	@Produces("application/json")
 	@Path("/details/investigator/{recordID}")
-	@Secured({FHSCUserCategory.INVESTIGATOR})
-	public Response getFileDetailsForInvestigator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+	@Secured({FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
+	public Response getFileDetailsForInvestigator(@PathParam("recordID") String recordID,@Context SecurityContext context) {
 		String username=context.getUserPrincipal().getName();
 		
 		Files f=null;
 		try{
-			f=fileUtility.getFile(username,recordID);
+			f=fileUtility.getFile(username,Integer.parseInt(recordID));
 			return Response.status(200).entity(f).build();
 		}catch(Exception e){
 			return Response.status(400).entity(e.getMessage()).type("text/plain").build();
@@ -101,12 +101,12 @@ public class FileListService {
 	
 	@GET
 	@Produces("application/json")
-	@Path("/details/coordinator/{recordID}")
+	@Path("/preview/coordinator/{recordID}")
 	@Secured({FHSCUserCategory.COORDINATOR})
-	public Response getFilePerviewForCoordinator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
+	public Response getFilePreviewForCoordinator(@PathParam("recordID") String recordID,@Context SecurityContext context) {
 		Files f=null;
 		try{
-			f=fileUtility.getFile(recordID);
+			f=fileUtility.getFile(Integer.parseInt(recordID));
 			/*
 			 * transform in pdf and return stream! 
 			 */
@@ -124,8 +124,8 @@ public class FileListService {
 	 */
 	@GET
 	@Produces("application/json")
-	@Path("/details/investigator/{recordID}")
-	@Secured({FHSCUserCategory.INVESTIGATOR})
+	@Path("/preview/investigator/{recordID}")
+	@Secured({FHSCUserCategory.LEAD_INVESTIGATOR,FHSCUserCategory.CONTRIBUTING_INVESTIGATOR})
 	public Response getFilePreviewForInvestigator(@PathParam("recordID") int recordID,@Context SecurityContext context) {
 		String username=context.getUserPrincipal().getName();
 		

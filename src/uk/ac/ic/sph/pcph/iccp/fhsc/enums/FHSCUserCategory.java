@@ -1,8 +1,11 @@
 package uk.ac.ic.sph.pcph.iccp.fhsc.enums;
 
 public enum FHSCUserCategory {
-    INVESTIGATOR,
+	
+    LEAD_INVESTIGATOR,
+    CONTRIBUTING_INVESTIGATOR,
     COORDINATOR,
     DISQUALIFIED,
-    PENDING
+    PENDING;
+
 }

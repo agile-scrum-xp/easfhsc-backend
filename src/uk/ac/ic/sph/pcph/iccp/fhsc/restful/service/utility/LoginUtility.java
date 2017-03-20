@@ -17,11 +17,13 @@ import uk.ac.ic.sph.pcph.iccp.fhsc.domain.Login;
 import uk.ac.ic.sph.pcph.iccp.fhsc.domain.User;
 import uk.ac.ic.sph.pcph.iccp.fhsc.enums.PersistenceUnitEnum;
 import uk.ac.ic.sph.pcph.iccp.fhsc.qualifier.PersistenceUnitQualifier;
+import uk.ac.ic.sph.pcph.iccp.fhsc.utility.HashingUtility;
 
 @Named
 @ApplicationScoped
 public class LoginUtility {
 
+	
 	@Inject
 	@PersistenceUnitQualifier(PersistenceUnitEnum.FHSC_MANAGEMENT)
 	private EntityManagerFactory fhsc_management_emf;
@@ -33,7 +35,7 @@ public class LoginUtility {
 		return fhsc_management_emf.createEntityManager();
 	}
 
-	public User validateLogin(String userName, String password) {
+	public User validateLogin(String userName, String password) throws Exception {
 		EntityManager em = null;
 		Login result = null;
 
@@ -56,7 +58,7 @@ public class LoginUtility {
 		}
 
 		if (result != null)
-			if (result.getPassword().equals(password)) {
+			if (result.getPassword().equals(new HashingUtility().hashString(password, userName))) {
 				User tempUser = getUser(result);
 				return tempUser;
 			}
@@ -73,6 +75,31 @@ public class LoginUtility {
 			
 			TypedQuery<Login> query = em.createNamedQuery("Login.findByUserName", Login.class);
 			query.setParameter("userName", userName);
+			
+			results = query.getResultList();
+			
+		} catch (Exception nee)  {
+			nee.printStackTrace();
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		if(!results.isEmpty())
+			return results.get(0);
+		else
+			return null;
+	}
+	
+	public Login getLoginForUser(User user){
+		EntityManager em = null;
+		List<Login> results = null; 
+		
+		try {
+			em = getEntityManager();
+			
+			TypedQuery<Login> query = em.createNamedQuery("Login.findByUserId", Login.class);
+			query.setParameter("userId", user);
 			
 			results = query.getResultList();
 			
@@ -119,7 +146,7 @@ public class LoginUtility {
 
 	public Login createLoginForUser(User user) throws PreexistingEntityException, Exception {
 
-		System.out.println("creating login");
+		System.out.println("Creating login");
 		//create username with initials, the add an increment if initial already taken.
 		String userName=attributeNewUserName(user);
 		System.out.println("new userName is " + userName);
@@ -139,6 +166,22 @@ public class LoginUtility {
 		return login;
 	}
 	
+	/**
+	 * Encrypting login after email is sent to user.
+	 * @param login
+	 */
+	public void secureLogin(Login login)throws Exception
+	{
+		login.setPassword(new HashingUtility().hashString(login.getPassword(), login.getUserName()));
+		new LoginJpaController(this.fhsc_management_emf).edit(login);
+	}
+	
+	public void changeLogin(String username, String password) throws Exception
+	{
+		Login login=this.getLoginForUsername(username);
+		login.setPassword(new HashingUtility().hashString(password, username));
+		new LoginJpaController(this.fhsc_management_emf).edit(login);
+	}
 	
 	private String generatePassword(){
 		int minimum=48;

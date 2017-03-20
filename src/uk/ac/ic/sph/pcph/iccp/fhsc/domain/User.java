@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lkc-dev
  */
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -85,7 +85,7 @@ public class User implements Serializable {
     @Basic(optional = true)
     @Column(name = "category")
     private String category;
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "comment")
     private String comment;
     @Basic(optional = true)
@@ -98,6 +98,18 @@ public class User implements Serializable {
     @Column(name = "application_date")
     @Temporal(TemporalType.DATE)
     private Date applicationDate;
+    @Basic(optional = false)
+    @Column(name = "security_question1")
+    private String questionOne;
+    @Basic(optional = false)
+    @Column(name = "security_question2")
+    private String questionTwo;
+    @Basic(optional = false)
+    @Column(name = "security_answer1")
+    private String answerOne;
+    @Basic(optional = false)
+    @Column(name = "security_answer2")
+    private String answerTwo;
 
     public User() {
     }
@@ -251,8 +263,43 @@ public class User implements Serializable {
     public void setApplicationDate(Date applicationDate) {
         this.applicationDate = applicationDate;
     }
+    
+    
 
-    @Override
+
+	public String getQuestionOne() {
+		return questionOne;
+	}
+
+	public void setQuestionOne(String questionOne) {
+		this.questionOne = questionOne;
+	}
+
+	public String getQuestionTwo() {
+		return questionTwo;
+	}
+
+	public void setQuestionTwo(String questionTwo) {
+		this.questionTwo = questionTwo;
+	}
+
+	public String getAnswerOne() {
+		return answerOne;
+	}
+
+	public void setAnswerOne(String answerOne) {
+		this.answerOne = answerOne;
+	}
+
+	public String getAnswerTwo() {
+		return answerTwo;
+	}
+
+	public void setAnswerTwo(String answerTwo) {
+		this.answerTwo = answerTwo;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (userId != null ? userId.hashCode() : 0);
