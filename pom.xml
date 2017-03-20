@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>fhscServices</name>
 
-        <repositories>
+	<repositories>
 		<repository>
 			<id>java.net2</id>
 			<name>Repository hosting the jee6 artifacts</name>
@@ -25,7 +25,7 @@
 	</properties>
 
 	<dependencies>
-                <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -153,9 +153,9 @@
 		</dependency>
 
 		<!-- Java Mail related libraries -->
-		<!--  These libraries should be in Tomcat/lib folder -->
-		<!--  There presence in WEB-INF/lib is not available at the startup of application -->
-		<!--  Two version of libraries results session casting exception -->
+		<!-- These libraries should be in Tomcat/lib folder -->
+		<!-- There presence in WEB-INF/lib is not available at the startup of application -->
+		<!-- Two version of libraries results session casting exception -->
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
